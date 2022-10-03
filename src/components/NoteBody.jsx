@@ -5,8 +5,22 @@ import AddPage from "../pages/AddPage";
 import ArchivesPage from "../pages/ArchivesPage";
 import DetailPage from "../pages/DetailPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
-const NoteBody = () => {
+const NoteBody = ({authedUser, loginSuccess}) => {
+
+  if (authedUser === null) {
+    return (
+      <main>
+        <Routes>
+          <Route path="*" element={<LoginPage loginSuccess={loginSuccess}/>} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+     </main>
+    )
+  }
+  
   return (
     <main>
       <Routes>
