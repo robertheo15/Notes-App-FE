@@ -1,64 +1,49 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import AddNoteButton from "../components/AddNoteButton";
 import NoteList from "../components/NoteList";
-import { getActiveNotes } from "../utils/local-data";
+import LocaleContext from "../contexts/LocaleContext";
+import { getActiveNotes } from "../utils/api";
+import AddNoteButton from "../components/AddNoteButton";
 
-const HomePageWrapper = () => {
+
+const HomePage = () => {  
   const [searchParams, setSearchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword");
+  const [notes, setNotes] = React.useState([]);
+  const [keyword, setKeyword] = React.useState(() => {
+    return searchParams.get("keyword") || "";
+  });
+  const { locale } = React.useContext(LocaleContext);
 
-  const changeSearchParams = (keyword) => {
-    setSearchParams({ keyword: keyword });
-  };
+  React.useEffect(() => {
+    getActiveNotes().then(({ data }) => {
+      setNotes(data);
+    });
+  }, []);
+
+  const onKeywordChangeHandler = (keyword) => {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
+
+  const filteredNotes =  notes.filter((note) => {
+    return note.title
+      .toLowerCase()
+      .includes(keyword.toLowerCase());
+  });
 
   return (
-    <HomePage defaultKeyword={keyword} keywordChange={changeSearchParams} />
+    <section className="homepage">
+      <h2>Catatan Aktif</h2>
+      <SearchBar
+        keyword={keyword}
+        keywordChange={onKeywordChangeHandler}
+      />
+      <NoteList notes={filteredNotes} />
+      <AddNoteButton />
+    </section>
   );
-};
-
-class HomePage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      notes: getActiveNotes(),
-      keyword: props.defaultKeyword || "",
-    };
-
-    this.onKeywordChangeHandler = this.onKeywordChangeHandler.bind(this);
-  }
-
-  onKeywordChangeHandler(keyword) {
-    this.setState(() => {
-      return {
-        keyword,
-      };
-    });
-
-    this.props.keywordChange(keyword);
-  }
-
-  render() {
-    const notes = this.state.notes.filter((note) => {
-      return note.title
-        .toLowerCase()
-        .includes(this.state.keyword.toLowerCase());
-    });
-
-    return (
-      <section className="homepage">
-        <h2>Catatan Aktif</h2>
-        <SearchBar
-          keyword={this.state.keyword}
-          keywordChange={this.onKeywordChangeHandler}
-        />
-        <NoteList notes={notes} />
-        <AddNoteButton />
-      </section>
-    );
-  }
 }
 
-export default HomePageWrapper;
+export default HomePage;
+
