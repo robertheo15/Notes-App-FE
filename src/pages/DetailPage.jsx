@@ -1,71 +1,53 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
-import NoteDetailItem from "../components/NoteDetailItem";
+import { useNavigate } from "react-router-dom";
 import { getNote, archiveNote, unarchiveNote, deleteNote } from "../utils/api";
+import NoteDetailItem from "../components/NoteDetailItem";
 import DetailActionButton from "../components/DetailActionButton";
 import NotesObject from "../utils/NotesObject";
-import LocaleContext from "../contexts/LocaleContext";
 
-// const DetailPageWrapper = ({ archiveNote, unarchiveNote, deleteNote }) => {
-//   const { id } = useParams();
-//   return (
-//     <DetailPage
-//       id={String(id)}
-//       archiveNote={archiveNote}
-//       unarchiveNote={unarchiveNote}
-//       deleteNote={deleteNote}
-//     />
-//   );
-// };
-
-// class DetailPage extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       notes: getNote(props.id),
-//     };
-//   }
-//   render() {
-//     console.log(this.state.notes)
-//     return (
-//       <section className="detail-page">
-//         <NoteDetailItem notes={this.state.notes} />
-//         <DetailActionButton
-//           notes={this.state.notes}
-//           archiveNote={archiveNote}
-//           unarchiveNote={unarchiveNote}
-//           deleteNote={deleteNote}
-//         />
-//       </section>
-//     );
-//   }
-// }
 const DetailPage = () => {
   const { id } = useParams();
   const [notes, setNotes] = React.useState([]);
-  const { locale } = React.useContext(LocaleContext);
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     getNote(id).then(({ data }) => {
       setNotes(data);
     });
   }, [id]);
+
+  const onArchiveNoteHandler = async (note) => {
+    await archiveNote(note);
+    navigate("/");
+  };
+
+  const onunArchiveNoteNoteHandler = async (note) => {
+    await unarchiveNote(note);
+    navigate("/");
+  };
+
+  const onunDeleteNoteHandler = async (note) => {
+    await deleteNote(note);
+    navigate("/");
+  };
+
   return (
     <section className="detail-page">
       <NoteDetailItem notes={notes} />
       <DetailActionButton
         notes={notes}
-        archiveNote={archiveNote}
-        unarchiveNote={unarchiveNote}
-        deleteNote={deleteNote}
+        archiveNote={onArchiveNoteHandler}
+        unarchiveNote={onunArchiveNoteNoteHandler}
+        deleteNote={onunDeleteNoteHandler}
       />
     </section>
   );
 };
 
 DetailPage.propType = {
-  notes: PropTypes.arrayOf(PropTypes.shape(NotesObject)).isRequired,
+  notes: PropTypes.shape(NotesObject).isRequired,
   archiveNote: PropTypes.func.isRequired,
   unarchiveNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,

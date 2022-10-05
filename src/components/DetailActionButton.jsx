@@ -2,8 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { BiArchiveIn, BiArchiveOut } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import NotesObject from "../utils/NotesObject";
 
 const DetailActionButton = ({
   notes,
@@ -11,8 +9,6 @@ const DetailActionButton = ({
   unarchiveNote,
   deleteNote,
 }) => {
-  const navigate = useNavigate();
-
   if (notes.archived === true) {
     return (
       <div className="add-new-page__action">
@@ -22,7 +18,6 @@ const DetailActionButton = ({
           title="Arsipkan"
           onClick={() => {
             unarchiveNote(notes.id);
-            navigate("/");
           }}
         >
           <BiArchiveIn />
@@ -34,7 +29,6 @@ const DetailActionButton = ({
           title="Hapus"
           onClick={() => {
             deleteNote(notes.id);
-            navigate("/");
           }}
         >
           <AiFillDelete />
@@ -50,7 +44,6 @@ const DetailActionButton = ({
           title="Aktifkan"
           onClick={() => {
             archiveNote(notes.id);
-            navigate("/");
           }}
         >
           <BiArchiveOut />
@@ -61,7 +54,6 @@ const DetailActionButton = ({
           title="Hapus"
           onClick={() => {
             deleteNote(notes.id);
-            navigate("/");
           }}
         >
           <AiFillDelete />
@@ -72,7 +64,6 @@ const DetailActionButton = ({
 };
 
 DetailActionButton.propTypes = {
-  notes: PropTypes.shape(NotesObject).isRequired,
   archiveNote: PropTypes.func.isRequired,
   unarchiveNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,

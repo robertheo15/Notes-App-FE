@@ -1,6 +1,4 @@
 import React from "react";
-import { GrAdd } from "react-icons/gr";
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 class LoginInput extends React.Component {
