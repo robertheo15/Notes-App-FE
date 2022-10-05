@@ -28,10 +28,10 @@ const RegisterPage = () => {
             <RegisterInput register={onRegisterHandler} />
             <p>
               {locale === "id"
-                ? "Sudah punya akun?"
-                : "Already have an account?"}
+                ? "Sudah punya akun? "
+                : "Already have an account? "}
               <Link to="/">
-                {locale === "id" ? " Login di sini" : " Login here"}
+                {locale === "id" ? "Login di sini" : "Login here"}
               </Link>
             </p>
           </section>
