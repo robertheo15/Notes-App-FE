@@ -2,6 +2,7 @@ import React from "react";
 import NoteHeader from "./components/NoteHeader";
 import NoteBody from "./components/NoteBody";
 import { LocaleProvider } from './contexts/LocaleContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { getUserLogged, putAccessToken } from './utils/api';
 class App extends React.Component {
   constructor(props) {
@@ -10,6 +11,20 @@ class App extends React.Component {
     this.state = {
       authedUser: null,
       initializing: true,
+      theme: localStorage.getItem('theme') || 'light',
+      toggleTheme: () => {
+        this.setState((prevState) => {
+          // mendapatkan nilai tema baru berdasarkan state sebelumnya
+          const newTheme = prevState.theme === 'light' ? 'dark' : 'light';
+          // menyimpan nilai tema baru ke local storage
+          localStorage.setItem('theme', newTheme);
+
+          // mengembalikan dengan nilai theme terbaru.
+          return {
+            theme: newTheme
+          };
+        });
+      },
       localeContext: {
         locale: localStorage.getItem('locale') || 'id',
         toggleLocale: () => {
@@ -40,6 +55,13 @@ class App extends React.Component {
         initializing: false
       };
     });
+    document.documentElement.setAttribute('data-theme', this.state.theme);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.theme !== this.state.theme) {
+      document.documentElement.setAttribute('data-theme', this.state.theme);
+    }
   }
 
   async onLoginSuccess({ accessToken }) {
@@ -71,22 +93,24 @@ class App extends React.Component {
     if (this.state.authedUser === null) {
       return (
       <LocaleProvider value={this.state.localeContext}>
-        <div className="app-container">
-          <NoteHeader authedUser={this.state.authedUser}/>
-          <NoteBody authedUser={this.state.authedUser} loginSuccess={this.onLoginSuccess}/>
-
-        </div>
+        <ThemeProvider value={this.state}>
+          <div className="app-container">
+            <NoteHeader authedUser={this.state.authedUser}/>
+            <NoteBody authedUser={this.state.authedUser} loginSuccess={this.onLoginSuccess}/>
+          </div>
+        </ThemeProvider>
       </LocaleProvider>
       )
     }
     
     return (
       <LocaleProvider value={this.state.localeContext}>
-        <div className="app-container">
-          <NoteHeader authedUser={this.state.authedUser} logout={this.onLogout} />
-          <NoteBody authedUser={this.state.authedUser} loginSuccess={this.onLoginSuccess}/>
-
-        </div>
+        <ThemeProvider value={this.state}>
+          <div className="app-container">
+            <NoteHeader authedUser={this.state.authedUser} logout={this.onLogout} />
+            <NoteBody authedUser={this.state.authedUser} loginSuccess={this.onLoginSuccess}/>
+          </div>
+        </ThemeProvider>
       </LocaleProvider>
     );
   }
