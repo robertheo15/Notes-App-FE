@@ -1,70 +1,45 @@
 import React from "react";
 import PropTypes from "prop-types";
+import useInput from "../hooks/useInput";
 
-class LoginInput extends React.Component {
-  constructor(props) {
-    super(props);
+const LoginInput = ({login}) => {
+  const [email, onEmailChange] = useInput('');
+  const [password, onPasswordChange] = useInput('');
 
-    this.state = {
-      email: "",
-      password: "",
-    };
-
-    this.onEmailChangeHandler = this.onEmailChangeHandler.bind(this);
-    this.onPasswordChangeHandler = this.onPasswordChangeHandler.bind(this);
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
-  }
-
-  onEmailChangeHandler(event) {
-    this.setState(() => {
-      return {
-        email: event.target.value,
-      };
-    });
-  }
-
-  onPasswordChangeHandler(event) {
-    this.setState(() => {
-      return {
-        password: event.target.value,
-      };
-    });
-  }
-
-  onSubmitHandler(event) {
+  const onSubmitHandler = (event) => {
     event.preventDefault();
 
-    this.props.login({
-      email: this.state.email,
-      password: this.state.password,
+    login({
+      email: email,
+      password: password,
     });
   }
-
-  render() {
-    return (
-      <div className="input-login">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="Email"
-          value={this.state.email}
-          onChange={this.onEmailChangeHandler}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          value={this.state.password}
-          onChange={this.onPasswordChangeHandler}
-        />
-        <button type="button" onClick={this.onSubmitHandler}>
-          Login
-        </button>
-      </div>
-    );
-  }
+  
+  return (
+    <div className="input-login">
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        value={email}
+        onChange={onEmailChange}
+      />
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        value={password}
+        onChange={onPasswordChange}
+      />
+      <button type="button" 
+      onClick={onSubmitHandler}
+      >
+        Login
+      </button>
+    </div>
+  );
 }
 
 LoginInput.propTypes = {
