@@ -8,9 +8,13 @@ const NoteList = ({ notes, isLoading }) => {
   if (notes.length > 0) {
     return (
       <section className="notes-list">
-        {notes.map((note) => (
-          isLoading === true ? <Skeleton key={note.id}/> : <NoteItem key={note.id} {...note} isLoading={isLoading} />
-        ))}
+        {notes.map((note) =>
+          isLoading === true ? (
+            <Skeleton key={note.id} />
+          ) : (
+            <NoteItem key={note.id} {...note} isLoading={isLoading} />
+          )
+        )}
       </section>
     );
   } else {

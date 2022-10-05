@@ -8,19 +8,18 @@ import NotFoundPage from "../pages/NotFoundPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 
-const NoteBody = ({authedUser, loginSuccess}) => {
-
+const NoteBody = ({ authedUser, loginSuccess }) => {
   if (authedUser === null) {
     return (
       <main>
         <Routes>
-          <Route path="*" element={<LoginPage loginSuccess={loginSuccess}/>} />
+          <Route path="*" element={<LoginPage loginSuccess={loginSuccess} />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
-     </main>
-    )
+      </main>
+    );
   }
-  
+
   return (
     <main>
       <Routes>
