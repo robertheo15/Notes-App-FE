@@ -1,64 +1,35 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import AddNoteButton from "../components/AddNoteButton";
 import NoteList from "../components/NoteList";
-import { getActiveNotes } from "../utils/local-data";
+import AddNoteButton from "../components/AddNoteButton";
+import { LocaleConsumer } from "../contexts/LocaleContext";
+import useNotes from "../hooks/useNotes";
+import useSearch from "../hooks/useSearch";
 
-const HomePageWrapper = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword");
+const HomePage = () => {
+  const [keyword, onKeywordChangeHandler] = useSearch();
+  const [notes, isLoading] = useNotes("active");
 
-  const changeSearchParams = (keyword) => {
-    setSearchParams({ keyword: keyword });
-  };
-
+  const filteredNotes = notes.filter((note) => {
+    return note.title.toLowerCase().includes(keyword.toLowerCase());
+  });
   return (
-    <HomePage defaultKeyword={keyword} keywordChange={changeSearchParams} />
+    <LocaleConsumer>
+      {({ locale }) => {
+        return (
+          <section className="homepage">
+            <h2>{locale === "id" ? "Catatan Aktif" : "Active Note"}</h2>
+            <SearchBar
+              keyword={keyword}
+              keywordChange={onKeywordChangeHandler}
+            />
+            <NoteList notes={filteredNotes} isLoading={isLoading} />
+            <AddNoteButton />
+          </section>
+        );
+      }}
+    </LocaleConsumer>
   );
 };
 
-class HomePage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      notes: getActiveNotes(),
-      keyword: props.defaultKeyword || "",
-    };
-
-    this.onKeywordChangeHandler = this.onKeywordChangeHandler.bind(this);
-  }
-
-  onKeywordChangeHandler(keyword) {
-    this.setState(() => {
-      return {
-        keyword,
-      };
-    });
-
-    this.props.keywordChange(keyword);
-  }
-
-  render() {
-    const notes = this.state.notes.filter((note) => {
-      return note.title
-        .toLowerCase()
-        .includes(this.state.keyword.toLowerCase());
-    });
-
-    return (
-      <section className="homepage">
-        <h2>Catatan Aktif</h2>
-        <SearchBar
-          keyword={this.state.keyword}
-          keywordChange={this.onKeywordChangeHandler}
-        />
-        <NoteList notes={notes} />
-        <AddNoteButton />
-      </section>
-    );
-  }
-}
-
-export default HomePageWrapper;
+export default HomePage;

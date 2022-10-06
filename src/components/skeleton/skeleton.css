@@ -1,0 +1,27 @@
+.note-item-skeleton{
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--on-background);
+  border-top: 5px solid;
+}
+
+.note-item__title-skeleton{
+  margin: 4px 0;
+  background: var(--on-background);
+}
+
+.note_item__createdAt-skeleton{
+  background: var(--on-background);
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.note_item__body-skeleton{
+  background: var(--on-background);
+  margin-top: 16px;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}

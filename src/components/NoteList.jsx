@@ -2,14 +2,19 @@ import React from "react";
 import NoteItem from "./NoteItem";
 import PropTypes from "prop-types";
 import NotesObject from "../utils/NotesObject";
+import Skeleton from "./skeleton/Skeleton";
 
-const NoteList = ({ notes }) => {
+const NoteList = ({ notes, isLoading }) => {
   if (notes.length > 0) {
     return (
       <section className="notes-list">
-        {notes.map((note) => (
-          <NoteItem key={note.id} {...note} />
-        ))}
+        {notes.map((note) =>
+          isLoading === true ? (
+            <Skeleton key={note.id} />
+          ) : (
+            <NoteItem key={note.id} {...note} isLoading={isLoading} />
+          )
+        )}
       </section>
     );
   } else {
@@ -23,5 +28,6 @@ const NoteList = ({ notes }) => {
 
 NoteList.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape(NotesObject)).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 export default NoteList;

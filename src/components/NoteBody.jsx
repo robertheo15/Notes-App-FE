@@ -5,8 +5,22 @@ import AddPage from "../pages/AddPage";
 import ArchivesPage from "../pages/ArchivesPage";
 import DetailPage from "../pages/DetailPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
+import PropTypes from "prop-types";
 
-const NoteBody = () => {
+const NoteBody = ({ authedUser, loginSuccess }) => {
+  if (authedUser === null) {
+    return (
+      <main>
+        <Routes>
+          <Route path="*" element={<LoginPage loginSuccess={loginSuccess} />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </main>
+    );
+  }
+
   return (
     <main>
       <Routes>
@@ -18,6 +32,11 @@ const NoteBody = () => {
       </Routes>
     </main>
   );
+};
+
+NoteBody.propTypes = {
+  authedUser: PropTypes.object,
+  loginSuccess: PropTypes.func.isRequired
 };
 
 export default NoteBody;

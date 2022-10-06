@@ -1,5 +1,5 @@
 import React from "react";
-import { addNote } from "../utils/local-data";
+import { addNote } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import NoteInput from "../components/NoteInput";
 

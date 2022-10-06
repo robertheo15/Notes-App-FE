@@ -1,61 +1,36 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import NoteList from "../components/NoteList";
-import { getArchivedNotes } from "../utils/local-data";
+import { LocaleConsumer } from "../contexts/LocaleContext";
+import useNotes from "../hooks/useNotes";
+import useSearch from "../hooks/useSearch";
 
-const ArchivesPageWrapper = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword");
+const ArchivesPage = () => {
+  const [keyword, onKeywordChangeHandler] = useSearch();
+  const [notes, isLoading] = useNotes("notactive");
 
-  const changeSearchParams = (keyword) => {
-    setSearchParams({ keyword: keyword });
-  };
+  const filteredNotes =  notes.filter((note) => {
+    return note.title
+      .toLowerCase()
+      .includes(keyword.toLowerCase());
+  });
 
-  return (
-    <ArchivesPage defaultKeyword={keyword} keywordChange={changeSearchParams} />
-  );
-};
-class ArchivesPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      notes: getArchivedNotes(),
-      keyword: props.defaultKeyword || "",
-    };
-
-    this.onKeywordChangeHandler = this.onKeywordChangeHandler.bind(this);
-  }
-
-  onKeywordChangeHandler(keyword) {
-    this.setState(() => {
-      return {
-        keyword,
-      };
-    });
-
-    this.props.keywordChange(keyword);
-  }
-
-  render() {
-    const notes = this.state.notes.filter((note) => {
-      return note.title
-        .toLowerCase()
-        .includes(this.state.keyword.toLowerCase());
-    });
-
-    return (
-      <section className="archives-page">
-        <h2>Catatan Arsip</h2>
+  return (    
+    <LocaleConsumer>
+     {({ locale }) => {
+       return (
+        <section className="archives-page">
+        <h2> {locale === "id" ? "Catatan Arsip" : "Archived Note"}</h2>
         <SearchBar
-          keyword={this.state.keyword}
-          keywordChange={this.onKeywordChangeHandler}
+          keyword={keyword}
+          keywordChange={onKeywordChangeHandler}
         />
-        <NoteList notes={notes} />
+        <NoteList notes={filteredNotes} isLoading={isLoading}/>
       </section>
-    );
-  }
+       );
+     }}
+   </LocaleConsumer>
+  );
 }
 
-export default ArchivesPageWrapper;
+export default ArchivesPage;
