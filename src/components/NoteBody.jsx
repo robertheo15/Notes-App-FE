@@ -7,6 +7,7 @@ import DetailPage from "../pages/DetailPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import PropTypes from "prop-types";
 
 const NoteBody = ({ authedUser, loginSuccess }) => {
   if (authedUser === null) {
@@ -31,6 +32,11 @@ const NoteBody = ({ authedUser, loginSuccess }) => {
       </Routes>
     </main>
   );
+};
+
+NoteBody.propTypes = {
+  authedUser: PropTypes.object,
+  loginSuccess: PropTypes.func.isRequired
 };
 
 export default NoteBody;

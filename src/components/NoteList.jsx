@@ -28,5 +28,6 @@ const NoteList = ({ notes, isLoading }) => {
 
 NoteList.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape(NotesObject)).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 export default NoteList;

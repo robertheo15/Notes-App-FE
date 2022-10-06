@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import PropTypes from "prop-types";
 
 const Navigation = ({ authedUser }) => {
   if (authedUser === null) {
@@ -37,4 +38,7 @@ const Navigation = ({ authedUser }) => {
   );
 };
 
+Navigation.propTypes = {
+  authedUser: PropTypes.object,
+};
 export default Navigation;

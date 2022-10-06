@@ -64,6 +64,7 @@ const DetailActionButton = ({
 };
 
 DetailActionButton.propTypes = {
+  notes:  PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   archiveNote: PropTypes.func.isRequired,
   unarchiveNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,

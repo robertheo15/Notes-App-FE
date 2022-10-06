@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MdOutlineGTranslate, MdLogout } from "react-icons/md";
 import ToggleTheme from "./ToggleTheme";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import PropTypes from "prop-types";
 
 const NoteHeader = ({ logout, authedUser }) => {
   if (authedUser === null) {
@@ -54,4 +55,8 @@ const NoteHeader = ({ logout, authedUser }) => {
   );
 };
 
+NoteHeader.propTypes = {
+  authedUser: PropTypes.object,
+  logout: PropTypes.func
+};
 export default NoteHeader;

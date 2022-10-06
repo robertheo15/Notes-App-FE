@@ -1,5 +1,6 @@
 import React from "react";
 import useInput from "../hooks/useInput";
+import PropTypes from "prop-types";
 
 const RegisterInput = ({ register }) => {
   const [name, onnameChange] = useInput("");
@@ -44,4 +45,7 @@ const RegisterInput = ({ register }) => {
   );
 };
 
+RegisterInput.propTypes = {
+  register: PropTypes.func.isRequired,
+};
 export default RegisterInput;

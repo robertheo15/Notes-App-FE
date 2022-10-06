@@ -1,5 +1,6 @@
 import React from "react";
 import { showFormattedDate } from "../utils";
+import PropTypes from "prop-types";
 
 const NoteDetailItem = ({ notes }) => {
   return (
@@ -13,4 +14,7 @@ const NoteDetailItem = ({ notes }) => {
   );
 };
 
+NoteDetailItem.propTypes = {
+  notes:  PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+};
 export default NoteDetailItem;
